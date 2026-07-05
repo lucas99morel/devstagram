@@ -25,10 +25,15 @@ class PerfilController extends Controller{
 
             $nombreImg = Str::uuid() . "." . $img->extension();
 
+            $carpeta = public_path('img/perfiles');
+            if(!is_dir($carpeta)){
+                mkdir($carpeta, 0755, true);
+            }
+
             $imgServidor = Image::read($img);
             $imgServidor->cover(1000,1000);
 
-            $imgPath = public_path('img/perfiles/') . $nombreImg;
+            $imgPath = $carpeta . "/$nombreImg";
             $imgServidor->save($imgPath);
         }
         

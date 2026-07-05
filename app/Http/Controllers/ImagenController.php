@@ -12,7 +12,7 @@ class ImagenController extends Controller{
     * Una vez el usuario elija una imagen, se ejecuta este controlador
     * Dropzone envia los datos/propiedades de la imagen con name="file" (a no ser que lo cambie en el js)
     * Se accede a estas propiedades mediante el metodo file() del request
-    * 
+    *  
     * $imgServidor es la imagen que se guardara en local
     * $nombreImg es el nombre unico con el que se guardara la imagen
     * $nombreImg es la cadena que se subira en la base de datos, se genera con Str::uuid()
@@ -35,5 +35,17 @@ class ImagenController extends Controller{
         return response()->json([
             'img' => $nombreImg
         ]);
+    }
+
+    public function destroy(Request $request){
+        $nombreImg = basename($request->imagen);
+
+        $imgPath = public_path('uploads') . "/$nombreImg";
+
+        if(file_exists($imgPath)){
+            unlink($imgPath);
+        }
+
+        return response()->json(['deleted' => true]);
     }
 }

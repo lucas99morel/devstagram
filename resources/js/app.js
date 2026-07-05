@@ -60,7 +60,20 @@ if(document.querySelector("#dropzone")){
         document.querySelector('[name="imagen"]').value = response.img;
     });
     
-    dropzone.on("removedfile",function(){
+    dropzone.on("removedfile", function(file){
         document.querySelector('[name="imagen"]').value = '';
+
+        if(file.xhr){
+            const respuesta = JSON.parse(file.xhr.responseText);
+
+            fetch('/imagenes/eliminar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ imagen: respuesta.img })
+            });
+        }
     });
 }
